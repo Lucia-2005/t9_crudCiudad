@@ -14,7 +14,7 @@ public class App {
 		
 		switch(opc) {
 		case 1: 
-			
+			System.out.println();
 		}
 		
 		
