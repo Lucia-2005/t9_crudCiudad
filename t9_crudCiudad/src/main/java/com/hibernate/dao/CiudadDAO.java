@@ -3,8 +3,9 @@ package com.hibernate.dao;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import com.ciudad.model.Ciudad;
-import com.ciudad.util.CiudadUtil;
+
+import com.hibernate.model.Ciudad;
+import com.hibernate.util.CiudadUtil;
 
 public class CiudadDAO {
 
@@ -54,6 +55,9 @@ public class CiudadDAO {
 		}
 	}//delete ciudad
 	
+	
+	
+	
 	//3 y 4
 	public void updateCiudad(Ciudad c) {
 		Transaction transaction=null;
@@ -77,7 +81,8 @@ public class CiudadDAO {
 		List<Ciudad> ciudades=null;
 		try(Session session=CiudadUtil.getSessionFactory().openSession()){
 			transaction=session.beginTransaction();
-			ciudades=session.createQuery("FROM ciudad", Ciudad.class).getResultList();
+			//"FROM Ciudad" usa el nombre de la clase, no de la tabla (mayusc)
+			ciudades=session.createQuery("FROM Ciudad",Ciudad.class).getResultList();
 			transaction.commit();
 		}catch(Exception e) {
 			if(transaction!= null) {

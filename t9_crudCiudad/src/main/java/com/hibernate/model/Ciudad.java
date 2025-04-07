@@ -1,4 +1,4 @@
-package com.ciudad.model;
+package com.hibernate.model;
 
 import jakarta.persistence.*;
 
@@ -21,9 +21,8 @@ public class Ciudad {
 		super();
 	}
 
-	public Ciudad(int codigo, String nombre, int numHabitantes) {
+	public Ciudad(String nombre, int numHabitantes) {
 		super();
-		this.codigo = codigo;
 		this.nombre = nombre;
 		this.numHabitantes = numHabitantes;
 	}
