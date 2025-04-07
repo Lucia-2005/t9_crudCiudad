@@ -91,6 +91,25 @@ public class App {
 				System.out.println("nombre: "+cid.getNombre()+", numero de habitantes: "+cid.getNumHabitantes());
 				System.out.println("----");
 				break;
+				
+			case 7: 
+				System.out.println("seleccionando ciudades con mas de 1K habitantes . . . ");
+				List<Ciudad> ciudades2=ciudadDAO.selectCiudadesMillon();
+				ciudades2.forEach(c->System.out.println(c.getNombre()+" --- "+c.getNumHabitantes()));
+				break;
+			
+			case 8: 
+				System.out.println("introduce el numero de habitantes limite: ");
+				int numHab=sc.nextInt();
+				List<Ciudad> ciudades3=ciudadDAO.selectCiudadSegunHabitantesUsuario(numHab);
+				ciudades3.forEach(c->System.out.println(c.getNombre()+" --- "+c.getNumHabitantes()));
+				break;
+			
+			case 9:
+				System.out.println("introduce el nombre de la ciudad: ");
+				String nombre=sc.next();
+				List<Ciudad> ciudades4=ciudadDAO.selectHabitantesSegunNomCiudad(nombre);
+				ciudades4.forEach(c->System.out.println(c.getNombre()+" --- "+c.getNumHabitantes()+" habitantes"));
 			}
 		}while(opc!=0);
 		

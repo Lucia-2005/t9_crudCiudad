@@ -3,6 +3,7 @@ package com.hibernate.dao;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import com.hibernate.model.Ciudad;
 import com.hibernate.util.CiudadUtil;
@@ -10,6 +11,7 @@ import com.hibernate.util.CiudadUtil;
 public class CiudadDAO {
 
 	public static void mostrarMenu() {
+		System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - ");
 		System.out.println("Elige una operación a realizar:");
 		System.out.println("1) Insertar nueva ciudad");
 		System.out.println("2) Borrar ciudad a partir del código");
@@ -17,6 +19,11 @@ public class CiudadDAO {
 		System.out.println("4) Actualizar habitantes");
 		System.out.println("5) Ver todas las ciudades");
 		System.out.println("6) Ver datos de la ciudad con el código");
+		System.out.println("--- --- ---");
+		System.out.println("7) Seleccionar ciudades con mas de 1K habitantes");
+		System.out.println("8) Seleccionar ciudades con menos habitantes que...");
+		System.out.println("9) Mostrar habitantes de ciudad segun nombre");
+		
 
 	}
 	
@@ -92,6 +99,7 @@ public class CiudadDAO {
 		return ciudades;
 	}
 	
+	
 	//6 y para hacer los que se ubican por id
 	public Ciudad selectCiudadByCodigo(int codigo) {
 		Transaction transaction =null;
@@ -107,6 +115,65 @@ public class CiudadDAO {
 		}
 		return c;
 	}//seleccion simple
+	
+	//7 
+	public List<Ciudad> selectCiudadesMillon(){
+		Transaction transaction=null;
+		List<Ciudad> ciudades=null;
+		try(Session session=CiudadUtil.getSessionFactory().openSession()){
+			transaction=session.beginTransaction();
+			//consulta de mysql, pero todos los valores son de la clase
+			ciudades=session.createQuery("FROM Ciudad WHERE numHabitantes>1000000").getResultList();
+			transaction.commit();
+		}catch(Exception e) {
+			if(transaction!= null) {
+				transaction.rollback();
+			}
+		}
+		return ciudades;
+	}
+	
+	
+	//8
+	public List<Ciudad> selectCiudadSegunHabitantesUsuario(int habitantes){
+		Transaction transaction=null;
+		List<Ciudad> ciudades=null;
+		try(Session session=CiudadUtil.getSessionFactory().openSession()){
+			transaction=session.beginTransaction();
+			//consulta de mysql
+			Query <Ciudad> query=session.createQuery("FROM Ciudad WHERE numHabitantes<:habitantesMax");
+			query.setParameter("habitantesMax", habitantes);
+			ciudades=query.getResultList();
+			transaction.commit();
+		}catch(Exception e) {
+			if(transaction!= null) {
+				transaction.rollback();
+			}
+		}
+		return ciudades;
+	}
+	
+	
+	//9
+	
+	public List<Ciudad> selectHabitantesSegunNomCiudad(String nombre){
+		Transaction transaction=null;
+		List<Ciudad> ciudades=null;
+		try(Session session=CiudadUtil.getSessionFactory().openSession()){
+			transaction=session.beginTransaction();
+			//consulta de mysql
+			Query <Ciudad> query=session.createQuery("FROM Ciudad WHERE nombre=:nomCiudad");
+			query.setParameter("nomCiudad", nombre);
+			ciudades=query.getResultList();
+			transaction.commit();
+		}catch(Exception e) {
+			if(transaction!= null) {
+				transaction.rollback();
+			}
+		}
+		return ciudades;
+	}
+	
 	
 	
 }//class
